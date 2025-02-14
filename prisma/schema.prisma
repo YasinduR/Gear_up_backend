@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(uuid())            // UUID primary key
+  email    String @unique                       // Unique email field
+  password String                               // Password field
+  firstname String?                            // Optional first name field
+  lastname  String?                            // Optional last name field
+  address   String?                            // Optional address field
+  hometown  String?                            // Optional hometown field
+  cart      Json?
+}
+
+model Item {
+  id        String  @id @default(uuid())            // UUID primary key
+  name          String
+  description   String
+  stock         Int
+  price         Float
+  special_price Float
+  images        String[]
+  unit          String?
+  category      String?
+  availability  String?
+}
+
+model Transaction {
+  id        String  @id @default(uuid())            // UUID primary key
+  datetime  DateTime  @default(now())              // Date and time of the transaction
+  userid    String?                                    // Nullable user ID (foreign key to User model)
+  amount    Float                                   // Total amount for the transaction
+  cart      Json                                    // Cart data (non-empty JSON)
+  type      String                                  // Type of transaction (e.g., "POS" or "Online Store")
+
+}
